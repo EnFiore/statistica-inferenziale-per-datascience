@@ -2,20 +2,26 @@
 dati<-read.csv("energy output.csv")
 attach(dati)
 
+#Costruisco scaterplot
 plot(Temperature,Pressure)
+
+#calcolo covarianza a mano
 covarianza <- sum( (Temperature-mean(Temperature))*(Pressure-mean(Pressure)) )/(length(Temperature)-1)
 covarianza
-
+#misuro la covarianza
 cov(Temperature,Pressure)
 
-
+#calcolo coefficiente di correlazione lineare di pearson
 pearson.rho <- cov(Temperature,Pressure)/ (sd(Temperature)*sd(Pressure))
 pearson.rho
+#fuznione nativa di R
 cor(Temperature,Pressure)
+#il valore è negativo, si ha una correlaizone negativa e il valore -0.56 indica una media correlaizone
 
 plot(Temperature,Vacuum)
 cov(Temperature,Vacuum)
 cor(Temperature,Vacuum)
+#i coefficienti di correlazione (cor) delle due variabili pressione e cvacuum sono confrontabili
 
 library(tidyverse)
 
