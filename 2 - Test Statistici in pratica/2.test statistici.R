@@ -81,7 +81,7 @@ qt(0.025,9)
 0.4-(2.26 * sqrt( (0.5*(1-0.5))/10) )
 0.4+(2.26 * sqrt( (0.5*(1-0.5))/10) )
 
-
+#Si usa sempre la funzione T test, anche qunado sipotrebbe usare lo z test
 t.test(campione_TC, 
        mu = 0.5,
        conf.level = 0.95, 
@@ -91,27 +91,43 @@ t.test(campione_TC,
 (0.4 - 0.5)/sqrt( ( (0.4)*(1-0.4))/9 ) #COME LO FA R
 
 
-
+#simula lancio moneta
 moneta<-c(1,0)
-lanci<-sample(moneta, 100, prob=c(0.2,0.8), replace = T)
+lanci<-sample(moneta, 100, prob=c(0.2,0.8), replace = T) #si vanno a impostare le probabilità del testa e croce
 lanci
+#faccio T test, che deve rifiutare l'ipotesi nulla
 t.test(lanci,mu=0.5)
+#p-value è molto piccolo si rifiuta ipotesi
 
-
+#TEst T per medie di campioni diversi
 data("iris")
-
+head(iris,5)
+#esploro dati con box plot
 boxplot(Sepal.Width~Species)
 
-pairwise.t.test(Sepal.Width, Species, 
+#fa confronti multipli tra le variabili e corregge il p-value in modo da suddividerlo per il numero di campioni
+#se p-value è basso si rifiuta l'ipotesi nulla di uguaglianze dell medie. Livello di confidenza 1-pvalue
+pairwise.t.test(Sepal.Width, Species, #variabili salvati con virogla e non tilde 
                 paired = F,
                 pool.sd = T,
-                p.adjust.method = "none")
+                p.adjust.method = "none") #none indica che il p-value non viene aggiustato
+#restituisce tabella p-value dei confronti
+#tutte le differenze in media sono significativamente diverse
 
+#APPLICO CORREZIONE DI BONFERRONI
+pairwise.t.test(Sepal.Width, Species, #variabili salvati con virogla e non tilde 
+                paired = F,
+                pool.sd = T,
+                p.adjust.method = "bonferroni") #applico correzione
 
 boxplot(InsectSprays$count~InsectSprays$spray)
 pairwise.t.test(InsectSprays$count,InsectSprays$spray)
 
-pairwise.wilcox.test(InsectSprays$count,InsectSprays$spray)
+#TEST non parametrici se variabili non si distribuiscono in manniera normale
+pairwise.wilcox.test(InsectSprays$count,InsectSprays$spray,
+         paired = F,
+         pool.sd = T,
+         p.adjust.method = "bonferroni") #applico correzione
 
 data("iris")
 attach(iris)
