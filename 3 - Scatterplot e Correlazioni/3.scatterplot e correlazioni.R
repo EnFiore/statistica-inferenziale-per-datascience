@@ -48,14 +48,18 @@ ggplot(data=filter(dati,dataset!="x_shape"))+
 
 dati <- read.csv("gare.csv",sep=";")
 dati
+#calcolo le posizioni in classiffica
 dati$pos.100m<- rank(dati$m100)
 dati$pos.maratona<- rank(dati$Maratona)
 dati
+#faccio la differenza tra le posizoni delle due classifiche
 dati$diff<-dati$pos.100m - dati$pos.maratona
 
 n=dim(dati)[1]
   
 cor.spearman <- 1 - 6 * (sum((dati$diff)^2) / (n*(n^2-1)))
+#correlazione leggermente negativa, bassa congrduazione le due classifiche non sono correlate
 
+#funzone per calcolo corrlazioni non parametriche
 cor(dati$m100,dati$Maratona,method = "spearman")
 cor(dati$m100,dati$Maratona,method = "kendall")
