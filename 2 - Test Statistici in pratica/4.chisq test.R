@@ -1,3 +1,5 @@
+#tabella di frequenze congiunte
+#i dati si riferiscono al numero di figli rispetto a livello di istruzione
 tabella <- matrix(data = c(45,22,32,12,
                            53,24,21,30,
                            24,65,40,3,
@@ -16,14 +18,15 @@ row.names(tabella) <- c("analfabeta",
                         "superiore",
                         "universitaria")
 
-install.packages("ggpubr")
+install.packages("ggpubr") #estensione ggplot pernette costruire baloone plot
 ggpubr::ggballoonplot(data=as.data.frame(tabella),
                       fill="blue")
+#se ci sono pattern diagonali di capisce che c'è associzione tra le due variabili
 
-
-margin.table(tabella,1)
-margin.table(tabella,2)
-margin.table(tabella)
+#restituisce le distribuzioni marginali delle varabili
+margin.table(tabella,1) #restituisce it otali di rgia
+margin.table(tabella,2) #restituisce il ltotale di colonna
+margin.table(tabella) #restituisce il total della tabella
 
 attese<- tabella
 
@@ -55,10 +58,6 @@ dati<-HairEyeColor[1,,]
 ggpubr::ggballoonplot(data=as.data.frame(dati),
                       fill="blue")
 chisq.test(dati)
-
-
-
-
 
 
 
