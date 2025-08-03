@@ -18,7 +18,7 @@ b0<- mean(Energy.output)-b1*mean(Temperature)
 b0;b1  
 
 #funzione che crea un modello lineare
-#dà la possibilità di indagare 12 elemnti
+#dà la possibilità di indagare 12 caratteristiche
 mod_lin<-lm(Energy.output~Temperature, data=dati)  #[-76,]
 
 #analizzo i coeefficienti
@@ -27,27 +27,37 @@ mod_lin$coefficients
 #mi sitentizza tutte le info del modello
 #p value piccolo indica che l'efetto di decremento è statisticamente rillevante
 summary(mod_lin)
-#aggiunfo la linea al caterplot
+#aggiunfo la linea al scaterplot
 abline(mod_lin,col=2)
 
 
+#CONTROLLO BONTA' MODELLO
+#divido in due la visualizazione
+par(mfrow=c(1,2)) #1 riga due colonne
 
-
-#par(mfrow=c(1,2))
+#rapresento i residui e l'indice delle osservazioni da 0 a 100
 plot(residuals(mod_lin))
 abline(h=mean(residuals(mod_lin)))
-
-
-
+#osservo distribuzione dei residui
+#la distribuzione ha una coda dovuti dagli outliner
 plot(density(residuals(mod_lin)))
 
+#test che permette di capire se una funzione è distribuita secondo una normale
+#p-value è piccolo si rifiuta l'ipotesi di nromalità
+
+#install.packages("lmtest")
+library(lmtest)
+
 shapiro.test(mod_lin$residuals)
-lmtest::bptest(mod_lin)
-lmtest::dwtest(mod_lin)
+#controllo omoschedadisticità e di non correlazione
+#p-value piccoli del valore soglia, si rifiuta ipotesi nulla
+lmtest::bptest(mod_lin) 
+lmtest::dwtest(mod_lin) #correlazione dei residui
+
 
 which.min(Energy.output)
 
-
+#utilizzo il modello per fare previsione, con una temperatura di 40
 predict(mod_lin,data.frame(Temperature=40))
 
 
