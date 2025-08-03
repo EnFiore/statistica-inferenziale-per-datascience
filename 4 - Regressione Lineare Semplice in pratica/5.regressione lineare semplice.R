@@ -5,20 +5,29 @@ summary(dati)
 #energy in megawatt
 #temperatura in gradi
 #pressione in millibar
-#umidit� relativa e vapori di scarico
+#umidità relativa e vapori di scarico
 
 
 plot(Temperature,Energy.output)
+#coefficiente di relazione
 cor(Temperature,Energy.output)
+#negativo e vicino a 1. Glia umenti di temperatura sfavoriscono la produzione di energia
 
-b1<- cov(Temperature,Energy.output)/var(Temperature)
+b1<- cov(Temperature,Energy.output)/var(Temperature) #coefficiente di regressione è negativo
 b0<- mean(Energy.output)-b1*mean(Temperature)
 b0;b1  
-  
+
+#funzione che crea un modello lineare
+#dà la possibilità di indagare 12 elemnti
 mod_lin<-lm(Energy.output~Temperature, data=dati)  #[-76,]
+
+#analizzo i coeefficienti
 mod_lin$coefficients
 
+#mi sitentizza tutte le info del modello
+#p value piccolo indica che l'efetto di decremento è statisticamente rillevante
 summary(mod_lin)
+#aggiunfo la linea al caterplot
 abline(mod_lin,col=2)
 
 
