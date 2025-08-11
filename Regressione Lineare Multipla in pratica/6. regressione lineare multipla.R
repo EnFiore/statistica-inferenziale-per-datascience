@@ -69,7 +69,7 @@ anova(mod.interaz,mod4)
 #modello più semplice senza interazioni
 
 
-#modelli di informazione. GLi indici vanno conforntati con altri modelli. I modelli con valori più bassi
+#modelli di informazione. GLi indici vanno confrontati con altri modelli. I modelli con valori più bassi
 #sono i migliori
 AIC(mod,mod2,mod3,mod4,mod.interaz)
 BIC(mod,mod2,mod3,mod4,mod.interaz)
@@ -85,45 +85,49 @@ stepwise.mod <- MASS::stepAIC(mod,
               k=log(n)) #si indica il criterio da utilizzare di default AIC k= 2, per imporatere BIC k=log(n)
 summary(stepwise.mod) #resituisce il modello 4.
 
+#ANALISI DEI RESIDUI
 #analisi residui la parte erratica, devono rispettare le regole
 par(mfrow=c(2,2)) #divide la finestra grafica in 4
 plot(mod4)
-#i grafici indicano 1 i punti devono essere sparsi casualmente intorno la medi adi zero. Pattern ricurvo
-3relazione residui e i quantili di una distribuzione noramle. I punti seguono la retta = distribuzione normale
-#, tranne la paret inferioe 3 - non si devono vedere pattern per avere varianza costante
-#4 valori influenti o eprchè levarege o outline. Sogli 0,25 è di avvertimento, soglia a 1 è allarme. nessun punto supera
-#a,25 non ci dovrebbero essere problemi di valori influenti
+#Grafico 1. devono presentarsi casualmente intorno la media di zero. Ma pattern ricurvo, quindi parte dell'inforamzione
+#non bene rappresntata dai regressori.
+#Grafico 2. I punti seguono la retta = distribuzione normale, problemo nella coda inferiore, osservazione 76 isolata.
+#Grafico 3 - non si devono vedere pattern per avere varianza costante.
+#Grafico 4. valori influenti: levarege o outliner. Soglia 0,25 è di avvertimento, soglia a 1 è allarme. nessun punto supera
+#a,25 non ci dovrebbero essere problemi di valori influenti.
 
-#leverage
+#ANALISI DEI RESIDUI - VALORI NUMERICI
+#leverage - valori di leva
 lev<-hatvalues(mod4)
 plot(lev)
 # valore soglia
 p<-sum(lev)
 n<-length(lev)
 soglia=2*p/n
-abline(h=soglia,col=2) #aggiungo linea la grafico
+abline(h=soglia,col=2) #aggiungo linea al grafico
 lev[lev>soglia] #estraggo valori oltre soglia
-#Sono i leverage, sono le osservazioni, che si trovano lontane nello spazio dei regressori
+#Sono i leverage, sono le osservazioni, che si trovano lontane nello spazio dei regressori, variabili esplicative
 
 
 #outliers - calori estremi delle a varaibile risposta
 plot(rstudent(mod4)) #si usa t-student
 abline(h=c(-2,2))
-car::outlierTest(mod4) #estreae le osservaizoni outlier
+car::outlierTest(mod4) #estrae le osservaizoni outlier. Applicata corezione di Bonferroni
 
 
-#distanza di cook
-cook<-cooks.distance(mod4)  #valuta sia outlier che leverage
+#distanza di cook - valuta sia outlier che leverage
+cook<-cooks.distance(mod4) 
 plot(cook,ylim = c(0,1)) 
-max(cook) #distanza di cook max = 0.23. che però non si avvicina alla soglia di 0.25. osservazione
-#non ha influenza sul modello sulle stime di regressione
+max(cook) #distanza di cook max = 0.23. che però non si avvicina alla soglia di 0.25. 
+#osservazione non ha influenza sulle stime di regressione.
 summary(mod4)
 
-#test sui residui
-lmtest::bptest(mod4) #omoschelarità varianza costa non si rifiuta lì'ipotesi nulla
+#test sui residui numerici
+lmtest::bptest(mod4) #omoschelasticità varianza costante non si rifiuta lì'ipotesi nulla
 lmtest::dwtest(mod4) #darwin watson i residui non sono auto correlate, non si rifiuta l'ipotesi nulla
-shapiro.test(mod4$residuals) #per normalità, si rifiutà lìipotesi nulla di normalità. Non è una dstribuzione normale
-plot(density(residuals(mod4)))
+shapiro.test(mod4$residuals) #per normalità si unsa shapiro test, si rifiuta lìipotesi nulla di normalità. 
+#Non è una dstribuzione normale
+plot(density(residuals(mod4))) #grafico per vedere la distribuzione dei residui. Problema su coda sinistra.
 
 car::crPlots(mod4)
 
@@ -135,10 +139,10 @@ summary(mod5)
 mod_76 <- lm(Energy.output~Humidity+Temperature,data=dati[-76,])
 summary(mod_76)
 
-
+#RAPPESENTAZINE 3D del modello Perchè ha 2 descrittori e una variabile risposta
 car::scatter3d(Energy.output~Humidity+Temperature)
 
-
+##NON VISTO DURANTE ESERCITAZIONE
 MSE<-function(y_oss,y_prev){
   return(sum((y_oss-y_prev)^2)/length(y_prev))
 }
