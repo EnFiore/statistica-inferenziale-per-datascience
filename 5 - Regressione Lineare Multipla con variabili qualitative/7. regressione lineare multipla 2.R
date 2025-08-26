@@ -38,7 +38,7 @@ panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...)
 pairs(dati,lower.panel=panel.cor, upper.panel=panel.smooth)
 #peso latezza correlazione alta e positivo anche nello scaterlpoy
 #peso età vicno allo 0 correlazione bassa
-#peso mesistop  il preso tende a diminuire, non è una correlaizione eclatante
+#peso mesistop  il peso tende a diminuire, non è una correlazione eclatante
 #reddito nessuna correlazione
 #variabili qualitative non vanno ben gli scaterplot e anche le correlaizoni perdono di significato
 
@@ -47,7 +47,7 @@ par(mfrow=c(1,2))
 boxplot(peso)
 boxplot(peso~sesso) #distribuzoni condizionati sulla variabile sesso si vede che i maschi pesano di più
 
-#valuto l'ipotesi di uguaglianza delle mesdie. p-value basso si rifiuta l'ipotesi nulla.
+#valuto l'ipotesi di uguaglianza delle medie. p-value basso si rifiuta l'ipotesi nulla.
 t.test(peso~sesso) #i valori di medie stimate sono significative
 
 #analizzo la variabile sport
