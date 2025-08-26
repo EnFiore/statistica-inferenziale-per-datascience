@@ -123,7 +123,7 @@ pairwise.t.test(Sepal.Width, Species, #variabili salvati con virogla e non tilde
 boxplot(InsectSprays$count~InsectSprays$spray)
 pairwise.t.test(InsectSprays$count,InsectSprays$spray)
 
-#TEST non parametrici se variabili non si distribuiscono in manniera normale
+#TEST non parametrici se variabili non si distribuiscono in maniera normale
 pairwise.wilcox.test(InsectSprays$count,InsectSprays$spray,
          paired = F,
          pool.sd = T,
